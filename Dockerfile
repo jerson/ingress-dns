@@ -12,5 +12,4 @@ WORKDIR /app
 
 COPY --from=build /app/dns-server .
 RUN apk --no-cache add ca-certificates tzdata
-
 ENTRYPOINT ["/app/dns-server"]
