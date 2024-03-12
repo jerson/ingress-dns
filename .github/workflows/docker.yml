@@ -1,3 +1,4 @@
+# This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
 name: Docker Image
@@ -8,7 +9,7 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
+jobs: 
     build:
       runs-on: ubuntu-latest
       steps:
@@ -17,7 +18,7 @@ jobs:
           uses: docker/metadata-action@v4
           with:
             images: |
-              ghcr.io/jerson/docker-luarocks/luarocks
+              ghcr.io/jerson/ingress-dns
         - uses: docker/setup-qemu-action@v3
         - uses: docker/setup-buildx-action@v3
         - if: github.event_name != 'pull_request'
