@@ -18,6 +18,7 @@ import (
 var (
 	kubeClient    *kubernetes.Clientset
 	dnsPort       = getEnv("DNS_PORT", "53")
+	podIP         = getEnv("POD_IP", "0.0.0.0")
 	fallbackDNS   = "1.1.1.1:53"
 	wildcardRegex = regexp.MustCompile(`^\*\.(?P<anydomain>[^*]+)$`)
 )
@@ -27,7 +28,7 @@ func main() {
 
 	dns.HandleFunc(".", handleDNSRequest)
 
-	server := &dns.Server{Addr: ":" + dnsPort, Net: "udp"}
+	server := &dns.Server{Addr: podIP + ":" + dnsPort, Net: "udp"}
 	log.Printf("Starting DNS server on %s\n", server.Addr)
 
 	if err := server.ListenAndServe(); err != nil {
@@ -81,7 +82,7 @@ func processQuery(m *dns.Msg, q dns.Question) {
 	confirmed, fallbackRequired := matchIngress(ingresses, name)
 
 	for range confirmed {
-		rr, err := dns.NewRR(fmt.Sprintf("%s A %s", q.Name, os.Getenv("INGRESS_IP")))
+		rr, err := dns.NewRR(fmt.Sprintf("%s A %s", q.Name, getEnv("INGRESS_IP", podIP)))
 		if err == nil {
 			log.Printf("Answer: %v\n", rr.String())
 			m.Answer = append(m.Answer, rr)
