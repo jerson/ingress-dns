@@ -19,7 +19,7 @@ jobs:
           uses: docker/metadata-action@v4
           with:
             images: |
-              ghcr.io/jerson/ingress-dns
+              ghcr.io/jerson/ingress-dns/dns
         - uses: docker/setup-qemu-action@v3
         - uses: docker/setup-buildx-action@v3
         - if: github.event_name != 'pull_request'
