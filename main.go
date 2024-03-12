@@ -28,7 +28,7 @@ func main() {
 
 	dns.HandleFunc(".", handleDNSRequest)
 
-	server := &dns.Server{Addr: podIP + ":" + dnsPort, Net: "udp"}
+	server := &dns.Server{Addr: fmt.Sprintf("%s:%s", podIP, dnsPort), Net: "udp"}
 	log.Printf("Starting DNS server on %s\n", server.Addr)
 
 	if err := server.ListenAndServe(); err != nil {
